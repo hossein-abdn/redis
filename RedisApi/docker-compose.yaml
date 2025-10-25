@@ -1,6 +1,8 @@
 services:
   redisapi:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: redisapi
     image: redisapi:latest
     environment:
