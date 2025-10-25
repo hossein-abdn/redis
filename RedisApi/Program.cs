@@ -21,6 +21,8 @@ class Program
             throw new InvalidOperationException("ConnectionStrings:Redis is not configured.");
         }
 
+        var redisConfigurationOptions = ConfigurationOptions.Parse(redisConnStr!);
+        builder.Services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(redisConfigurationOptions));
         builder.Services.AddStackExchangeRedisCache(options =>
         {
             options.Configuration = redisConnStr; // تمام تنظیمات ردیس از کانکشن‌استرینگ
@@ -57,6 +59,25 @@ class Program
                 : Results.Ok(new { key, value });
         })
         .WithName("GetCache")
+        .Produces(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status404NotFound);
+
+        app.MapGet("/api/cache/getall", async (IConnectionMultiplexer muxer, CancellationToken ct) =>
+        {
+            var result = new List<string>();
+
+            var endPoint = muxer.GetEndPoints().First();
+            Console.WriteLine(endPoint.ToString());
+            //RedisKey[] keys = muxer.GetServer(endPoint).Keys(pattern: "*").ToArray();
+
+            //result.AddRange(keys.Select(redisKey => redisKey.ToString()));
+
+            //return value is null
+            //    ? Results.NotFound(new { key, found = false })
+            //    : Results.Ok(new { key, value });
+            return endPoint.ToString();
+        })
+        .WithName("GetAll")
         .Produces(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status404NotFound);
 
