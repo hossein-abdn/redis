@@ -31,7 +31,7 @@ services:
     image: redis:8.2.2
     command: ["redis-server", "/etc/redis/redis.conf"]
     volumes:
-      - ./redis2-slave.conf:/etc/redis/redis.conf:ro
+      - ./redis3-slave.conf:/etc/redis/redis.conf:ro
       - redis3_data:/data
     networks:
       - swarm-network
@@ -64,7 +64,7 @@ services:
               chown -R 999:999 /data &&
               exec redis-server /data/sentinel.conf --sentinel'
     volumes:
-      - ./sentinel1.conf:/etc/redis/sentinel.conf:ro
+      - ./sentinel2.conf:/etc/redis/sentinel.conf:ro
     networks:
       - swarm-network
     deploy:
@@ -80,7 +80,7 @@ services:
               chown -R 999:999 /data &&
               exec redis-server /data/sentinel.conf --sentinel'
     volumes:
-      - ./sentinel1.conf:/etc/redis/sentinel.conf:ro
+      - ./sentinel3.conf:/etc/redis/sentinel.conf:ro
     networks:
       - swarm-network
     deploy:
