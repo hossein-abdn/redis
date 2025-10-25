@@ -1,0 +1,90 @@
+services:
+  redis1:
+    image: redis:8.2.2
+    command: ["redis-server", "/etc/redis/redis.conf"]
+    volumes:
+      - ./redis1-master.conf:/etc/redis/redis.conf:ro
+      - redis1_data:/data
+    networks:
+      - swarm-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      mode: replicated
+
+  redis2:
+    image: redis:8.2.2
+    command: ["redis-server", "/etc/redis/redis.conf"]
+    volumes:
+      - ./redis2-slave.conf:/etc/redis/redis.conf:ro
+      - redis2_data:/data
+    networks:
+      - swarm-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      mode: replicated
+
+  redis3:
+    image: redis:8.2.2
+    command: ["redis-server", "/etc/redis/redis.conf"]
+    volumes:
+      - ./redis2-slave.conf:/etc/redis/redis.conf:ro
+      - redis3_data:/data
+    networks:
+      - swarm-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      mode: replicated
+
+  sentinel1:
+    image: redis:8.2.2
+    command: ["redis-server", "/etc/redis/sentinel.conf", "--sentinel"]
+    volumes:
+      - .sentinel1.conf:/etc/redis/sentinel.conf:ro
+    networks:
+      - swarm-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      mode: replicated
+
+  sentinel2:
+    image: redis:8.2.2
+    command: ["redis-server", "/etc/redis/sentinel.conf", "--sentinel"]
+    volumes:
+      - .sentinel2.conf:/etc/redis/sentinel.conf:ro
+    networks:
+      - swarm-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      mode: replicated
+
+  sentinel3:
+    image: redis:8.2.2
+    command: ["redis-server", "/etc/redis/sentinel.conf", "--sentinel"]
+    volumes:
+      - .sentinel3.conf:/etc/redis/sentinel.conf:ro
+    networks:
+      - swarm-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      mode: replicated
+
+networks:
+  swarm-network:
+    external: true
+
+volumes:
+  redis1_data:
+  redis2_data:
+  redis3_data:
