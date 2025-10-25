@@ -43,9 +43,9 @@ services:
 
   sentinel1:
     image: redis:8.2.2
-    command: ["redis-server", "/etc/redis/sentinel.conf", "--sentinel"]
+    command: ["redis-server", "/data/sentinel.conf", "--sentinel"]
     volumes:
-      - ./sentinel1.conf:/etc/redis/sentinel.conf
+      - ./sentinel1.conf:/data/sentinel.conf
     networks:
       - swarm-network
     deploy:
@@ -56,9 +56,9 @@ services:
 
   sentinel2:
     image: redis:8.2.2
-    command: ["redis-server", "/etc/redis/sentinel.conf", "--sentinel"]
+    command: ["redis-server", "/data/sentinel.conf", "--sentinel"]
     volumes:
-      - ./sentinel2.conf:/etc/redis/sentinel.conf
+      - ./sentinel2.conf:/data/sentinel.conf
     networks:
       - swarm-network
     deploy:
@@ -69,9 +69,9 @@ services:
 
   sentinel3:
     image: redis:8.2.2
-    command: ["redis-server", "/etc/redis/sentinel.conf", "--sentinel"]
+    command: ["redis-server", "/data/sentinel.conf", "--sentinel"]
     volumes:
-      - ./sentinel3.conf:/etc/redis/sentinel.conf
+      - ./sentinel3.conf:/data/sentinel.conf
     networks:
       - swarm-network
     deploy:
