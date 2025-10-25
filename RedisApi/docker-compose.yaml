@@ -6,7 +6,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       # کانکشن‌استرینگ را اینجا Override کن
-      - ConnectionStrings__Redis=sentinel1:26379,sentinel2:26379,sentinel3:26379,serviceName=mymaster,abortConnect=false,ssl=False,defaultDatabase=0,password=1234@!@#$,connectTimeout=5000,syncTimeout=5000,tieBreaker=
+      - ConnectionStrings__Redis=sentinel1:26379,sentinel2:26379,sentinel3:26379,serviceName=mymaster,abortConnect=false,ssl=False,defaultDatabase=0,password=1234@!@#$$,connectTimeout=5000,syncTimeout=5000,tieBreaker=
     ports:
       - "8080:8080"
     restart: unless-stopped
