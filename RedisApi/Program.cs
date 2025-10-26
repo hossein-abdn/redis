@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.Extensions.Caching.Distributed;
 using StackExchange.Redis;
 
@@ -64,18 +65,20 @@ class Program
 
         app.MapGet("/api/cache/getall", async (IConnectionMultiplexer muxer, CancellationToken ct) =>
         {
-            var result = new List<string>();
+            var endpoints = muxer.GetEndPoints(configuredOnly: false);
+            var servers = endpoints
+            .Select(ep => muxer.GetServer(ep))
+            .ToList();
 
-            var endPoint = muxer.GetEndPoints().First();
-            Console.WriteLine(endPoint.ToString());
-            //RedisKey[] keys = muxer.GetServer(endPoint).Keys(pattern: "*").ToArray();
+            var result = servers.Select(x => new
+            {
+                isconnected = x.IsConnected.ToString(),
+                isreplica = x.IsReplica.ToString(),
+                serverType = x.ServerType.ToString(),
+                endPoint = x.EndPoint.ToString()
+            });
 
-            //result.AddRange(keys.Select(redisKey => redisKey.ToString()));
-
-            //return value is null
-            //    ? Results.NotFound(new { key, found = false })
-            //    : Results.Ok(new { key, value });
-            return endPoint.ToString();
+            return result.ToList();
         })
         .WithName("GetAll")
         .Produces(StatusCodes.Status200OK)
