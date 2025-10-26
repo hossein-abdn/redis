@@ -1,0 +1,5 @@
+docker swarm init
+docker network create -d overlay swarm-network
+git clone https://github.com/hossein-abdn/redis.git
+docker stack deploy -c docker-compose.yaml infra
+docker build -t redisapi .
